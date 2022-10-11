@@ -17,11 +17,13 @@ describe('CTF #3 TimeLock', function () {
 
   it('Should recover all funds', async function () {
     const Hack = await ethers.getContractFactory('N3TimeLockHack');
-    const hackInstance = await Hack.deploy();
+    const hackInstance = await Hack.connect(user).deploy();
     await hackInstance.deployed();
-
-    await hackInstance.hack(user.address, challengeInstance.address);
-    await challengeInstance.connect(user).withdraw();
+    const tx1 = await hackInstance.hack(challengeInstance.address);
+    await tx1.wait();
+    const tx2 = await hackInstance.withdrawFunds();
+    await tx2.wait();
     expect(await challengeInstance.balances(user.address)).to.equal('0');
+    expect(await ethers.provider.getBalance(hackInstance.address)).to.equal('0');
   });
 });

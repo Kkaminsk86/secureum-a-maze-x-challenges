@@ -10,7 +10,6 @@ describe('CTF #5 BecomeMaster', function () {
     const Challenge = await ethers.getContractFactory('N5BecomeMaster');
     challengeInstance = await Challenge.deploy({ value: ethers.utils.parseEther('0.0001') });
     await challengeInstance.deployed();
-    // console.log(deployer.address);
   });
 
   it('Should recover all funds', async function () {
@@ -19,6 +18,8 @@ describe('CTF #5 BecomeMaster', function () {
     await hackInstance.deployed();
     await challengeInstance.allocate({ value: ethers.utils.parseEther('0.0001') });
     await hackInstance.finalize(challengeInstance.address);
+    await hackInstance.withdraw();
     expect(await ethers.provider.getBalance(challengeInstance.address)).to.equal('0');
+    expect(await ethers.provider.getBalance(hackInstance.address)).to.equal('0');
   });
 });

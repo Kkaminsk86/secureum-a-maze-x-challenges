@@ -10,7 +10,7 @@ contract N5BecomeMaster {
   address caller;
 
   constructor() payable {
-    master = msg.sender; //deployer
+    master = msg.sender;
   }
 
   modifier onlyMaster() {
@@ -28,7 +28,7 @@ contract N5BecomeMaster {
 
   function allocate() public payable {
     allocations[caller] = allocations[caller] += (msg.value);
-    admin = tx.origin; //deployer
+    admin = tx.origin;
   }
 
   function sendAllocation(address payable allocator) public {
